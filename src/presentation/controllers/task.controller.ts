@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateTaskDto } from 'src/application/dto/create-task-dto';
 import { GetTaskFilterDto } from 'src/application/dto/get-task-filter-dto';
+import { UpdateStatusDto } from 'src/application/dto/update-status-dto';
 import { TaskService } from 'src/domain/services/task.service';
 
 @Controller('tasks')
@@ -18,31 +19,31 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Get('/')
-  getAll(@Query() filters: GetTaskFilterDto): object {
+  async getAll(@Query() filters: GetTaskFilterDto): Promise<object> {
     const response = {
-      tasks: this.taskService.getAll(filters),
+      tasks: await this.taskService.getAll(filters),
       status: HttpStatus.OK,
     };
     return response;
   }
 
   @Get('/:id')
-  get(@Param('id') id: string): object {
-    return { task: this.taskService.get(id), status: HttpStatus.OK };
+  async get(@Param('id') id: string): Promise<object> {
+    return { task: await this.taskService.get(id), status: HttpStatus.OK };
   }
 
   @Post('/')
-  create(@Body() createTaskDto: CreateTaskDto): object {
+  async create(@Body() createTaskDto: CreateTaskDto): Promise<object> {
     return {
-      task: this.taskService.create(createTaskDto),
+      task: await this.taskService.create(createTaskDto),
       status: HttpStatus.CREATED,
     };
   }
 
   @Delete('/:id')
-  delete(@Param('id') id: string): object {
+  async delete(@Param('id') id: string): Promise<object> {
     return {
-      task: this.taskService.delete(id),
+      task: await this.taskService.delete(id),
       status: HttpStatus.OK,
     };
   }
@@ -51,6 +52,14 @@ export class TaskController {
   update(@Param('id') id: string): object {
     return {
       task: this.taskService.update(id),
+      status: HttpStatus.OK,
+    };
+  }
+
+  @Patch('/:id')
+  updateStatus(@Param('id') id: string, @Body() status: UpdateStatusDto) {
+    return {
+      task: this.taskService.updateStatus(id, status),
       status: HttpStatus.OK,
     };
   }
