@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { TaskStatus } from 'src/domain/entities/task.entity';
+import { TaskStatus } from 'src/task/entity/task.entity';
 
 export class GetTaskFilterDto {
   @IsOptional()

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './presentation/controllers/app.controller';
-import { TasksModule } from './modules/task.module';
+import { AppController } from './app.controller';
+import { TasksModule } from './task/task.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getDataSourceOptions } from './db/config';

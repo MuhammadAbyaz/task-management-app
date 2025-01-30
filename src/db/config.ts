@@ -1,7 +1,6 @@
 import { type TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { DataSource, type DataSourceOptions } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Task } from 'src/domain/entities/task.entity';
+import { Task } from 'src/task/entity/task.entity';
 
 export const getDataSourceOptions = (
   configService: ConfigService,
@@ -10,19 +9,10 @@ export const getDataSourceOptions = (
   database: 'task-management-app',
   type: 'postgres',
   entities: [Task],
+  migrations: [__dirname + '/migrations/**/*.{js,ts}'],
+  migrationsTableName: 'migrations',
   ssl: {
     rejectUnauthorized: false,
   },
-  synchronize: true,
+  synchronize: false,
 });
-
-export default new DataSource({
-  url: process.env.DATABASE_URL,
-  database: 'task-management-app',
-  type: 'postgres',
-  entities: [Task],
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  synchronize: true,
-} as DataSourceOptions);

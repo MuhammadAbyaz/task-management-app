@@ -9,10 +9,11 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CreateTaskDto } from 'src/application/dto/create-task-dto';
-import { GetTaskFilterDto } from 'src/application/dto/get-task-filter-dto';
-import { UpdateStatusDto } from 'src/application/dto/update-status-dto';
-import { TaskService } from 'src/domain/services/task.service';
+import { CreateTaskDto } from 'src/task/dtos/create-task-dto';
+import { GetTaskFilterDto } from 'src/task/dtos/get-task-filter-dto';
+import { UpdateStatusDto } from 'src/task/dtos/update-status-dto';
+import { TaskService } from './task.service';
+import { UpdateTaskDto } from './dtos/update-task-dto';
 
 @Controller('tasks')
 export class TaskController {
@@ -49,17 +50,21 @@ export class TaskController {
   }
 
   @Patch('/:id')
-  update(@Param('id') id: string): object {
+  async update(
+    @Param('id') id: string,
+    @Body() updatedTask: UpdateTaskDto,
+  ): Promise<object> {
+    const task = await this.taskService.update(id, updatedTask);
     return {
-      task: this.taskService.update(id),
+      task,
       status: HttpStatus.OK,
     };
   }
 
-  @Patch('/:id')
-  updateStatus(@Param('id') id: string, @Body() status: UpdateStatusDto) {
+  @Patch('/:id/status')
+  async updateStatus(@Param('id') id: string, @Body() status: UpdateStatusDto) {
     return {
-      task: this.taskService.updateStatus(id, status),
+      task: await this.taskService.updateStatus(id, status),
       status: HttpStatus.OK,
     };
   }

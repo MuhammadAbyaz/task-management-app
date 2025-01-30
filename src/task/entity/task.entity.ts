@@ -1,5 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+export enum TaskStatus {
+  IN_PROGRESS = 'In Progress',
+  DONE = 'Done',
+}
+
 @Entity({ name: 'tasks' })
 export class Task {
   @PrimaryGeneratedColumn('uuid')
@@ -11,10 +16,6 @@ export class Task {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ default: TaskStatus.IN_PROGRESS })
   status: TaskStatus;
-}
-export enum TaskStatus {
-  IN_PROGRESS = 'In Progress',
-  DONE = 'Done',
 }
